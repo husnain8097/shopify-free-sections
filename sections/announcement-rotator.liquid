@@ -1,0 +1,41 @@
+<div class="ann-rotator" style="background: {{ section.settings.bg }}; color: {{ section.settings.fg }};">
+  <div class="ann-rotator__track">
+    {% if section.settings.msg1 != blank %}<p class="ann-rotator__msg is-active">{{ section.settings.msg1 }}</p>{% endif %}
+    {% if section.settings.msg2 != blank %}<p class="ann-rotator__msg">{{ section.settings.msg2 }}</p>{% endif %}
+    {% if section.settings.msg3 != blank %}<p class="ann-rotator__msg">{{ section.settings.msg3 }}</p>{% endif %}
+  </div>
+</div>
+
+<style>
+  .ann-rotator { text-align: center; padding: 9px 12px; font-size: 13px; letter-spacing: .02em; }
+  .ann-rotator__msg { margin: 0; display: none; }
+  .ann-rotator__msg.is-active { display: block; }
+</style>
+
+<script>
+  (function () {
+    var msgs = document.querySelectorAll('.ann-rotator__msg');
+    if (msgs.length < 2) return;
+    var i = 0;
+    setInterval(function () {
+      msgs[i].classList.remove('is-active');
+      i = (i + 1) % msgs.length;
+      msgs[i].classList.add('is-active');
+    }, {{ section.settings.speed | times: 1000 }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Announcement rotator",
+  "settings": [
+    { "type": "text", "id": "msg1", "label": "Message 1", "default": "Free delivery on orders over AED 200" },
+    { "type": "text", "id": "msg2", "label": "Message 2", "default": "Easy 14-day size exchange" },
+    { "type": "text", "id": "msg3", "label": "Message 3", "default": "Cash on delivery available" },
+    { "type": "range", "id": "speed", "label": "Seconds per message", "min": 2, "max": 10, "step": 1, "default": 4 },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#111111" },
+    { "type": "color", "id": "fg", "label": "Text colour", "default": "#ffffff" }
+  ],
+  "presets": [{ "name": "Announcement rotator" }]
+}
+{% endschema %}
